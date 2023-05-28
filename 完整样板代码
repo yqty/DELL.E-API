@@ -4,7 +4,7 @@ import requests
 import re
 
 # Set OpenAI API Key
-openai_api_key = "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"
+openai_api_key = "sk-xxxx"
 
 # Streamlit App
 st.title("DALL-E Image Generation with OpenAI API and Tencent Cloud")
@@ -21,7 +21,7 @@ if prompt:
         }
         data = {"prompt": prompt, "n": 1, "size": "1024x1024"}
         response = requests.post(
-            "https://service-6ehx9pyq-1317411446.usw.apigw.tencentcs.com/v1/images/generations",
+            "https://service-ccccccccs.com/v1/images/generations",
             headers=headers,
             json=data,
         )
