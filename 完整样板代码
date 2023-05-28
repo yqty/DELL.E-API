@@ -1,0 +1,39 @@
+# python -m streamlit run app.py
+import streamlit as st
+import requests
+import re
+
+# Set OpenAI API Key
+openai_api_key = "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"
+
+# Streamlit App
+st.title("DALL-E Image Generation with OpenAI API and Tencent Cloud")
+
+# Prompt input
+prompt = st.text_input("Enter Prompt")
+print("prompt:", prompt)
+if prompt:
+    with st.spinner("Waiting for DALL-E..."):
+        prompt = re.sub(r"[^a-zA-Z,\s]+", "", prompt).strip()
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {openai_api_key}",
+        }
+        data = {"prompt": prompt, "n": 1, "size": "1024x1024"}
+        response = requests.post(
+            "https://service-6ehx9pyq-1317411446.usw.apigw.tencentcs.com/v1/images/generations",
+            headers=headers,
+            json=data,
+        )
+        print("data:", data)
+        response_json = response.json()
+        print("response_json:", response.json())
+        if (
+            "data" in response_json
+            and len(response_json["data"]) > 0
+            and "url" in response_json["data"][0]
+        ):
+            image_url = response_json["data"][0]["url"]
+            st.image(image_url, caption=prompt)
+        else:
+            st.warning("Failed to generate image with DALL-E API.", icon="⚠️")
